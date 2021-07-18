@@ -1,0 +1,8 @@
+[submodule "GHA-testing"]
+	path = GHA-testing
+	url = git@github.com:JJMC89/GHA-testing.git
+	branch = master
+[submodule "pywikibot"]
+	path = pywikibot
+	url = git@github.com:wikimedia/pywikibot.git
+	branch = stable

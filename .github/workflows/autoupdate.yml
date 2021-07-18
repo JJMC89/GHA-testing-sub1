@@ -1,0 +1,31 @@
+name: Autoupdate
+on:
+  schedule:
+    - cron: '6 6 * * 6'
+  workflow_dispatch:
+jobs:
+  update:
+    name: Autoupdate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - name: Configure
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+      - name: Autoupdate submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --remote --recursive --no-single-branch
+          git commit -am "chore: autoupdate submodules" || echo no updates
+      - name: Autoupdate from .toolforge
+        run: |
+          cp -auv ./*/.toolforge/* .
+          git add .
+          git commit -m "chore: autoupdate from submodules' .toolforge" || echo no updates
+      - name: Push
+        run: git push
